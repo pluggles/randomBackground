@@ -15,7 +15,7 @@ You will need to set up an Imgur api key:
 http://api.imgur.com/
 
 once you get your client ID and client secret put them in the script for their respective api_key_id and api_secret variables
-Also you will need change the user agent on the r = praw.Reddit(user_agent='') line.
+Also you will need change the user agent on the r = praw.Reddit(user_agent="MAKE THIS UNIQUE") line.
 
 You can add and remove any subreddits you want to get images from in the selectSubreddit() function.
 
