@@ -4,7 +4,6 @@ import re
 import praw
 import requests
 import os
-import glob
 import sys
 import random
 from imgurpython import ImgurClient
