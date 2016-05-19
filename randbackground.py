@@ -12,7 +12,7 @@ from os.path import splitext, basename, expanduser
 
 def MakeDir():
     try:
-        os.mkdir(subdirectory)
+        os.makedirs(subdirectory)
     except Exception:
         pass
 
