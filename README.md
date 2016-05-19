@@ -3,8 +3,11 @@ Finds an imgur link from multiple reddit wallpaper subreddits, downloads the ima
 
 #Needed packages
 sudo pip install imgurpython 
+
 sudo pip install praw
+
 sudo pip install urlparse
+
 sudo pip install pyopenssl ndg-httpsclient pyasn1
 
 #Using the Script
