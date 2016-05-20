@@ -123,7 +123,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.debug:
         logging.basicConfig(filename=debug_file, level=logging.DEBUG)
-   #start imgur session
     logging.info("Start of run")
     try:
         client = ImgurClient(api_key_id, api_secret)
