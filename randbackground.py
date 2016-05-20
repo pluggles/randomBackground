@@ -13,15 +13,19 @@ from urlparse import urlparse
 from os.path import splitext, basename, expanduser
 
 ### Change these to fit your needs ######
-api_key_id = '###############'
-api_secret = '#########################################'
+api_key_id = '#################'
+api_secret = '###############################'
 localFileName = 'newBackgroundImage'
 home = expanduser("~")
-subdirectory = home + "/Documents/scripts/randomBackground/backgroundImages"
+subdirectory = home + "/Documents/scripts/backgroundImages"
 MIN_SCORE = 10
 subLimit = 500
-reddit_user_agent = '#####################'
-debug_file = home + "/Documents/scripts/randomBackgrounds/log.txt"
+reddit_user_agent = '##################'
+debug_file = home + "/Documents/scripts/log.txt"
+
+def saveLastImage():
+    os.rename(os.path.join(subdirectory, localFileName), os.path.join(subdirectory,localFileName + "-old"))
+
 def MakeDir(subDir):
     try:
         os.makedirs(subDir)
@@ -123,6 +127,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.debug:
         logging.basicConfig(filename=debug_file, level=logging.DEBUG)
+   #start imgur session
     logging.info("Start of run")
     try:
         client = ImgurClient(api_key_id, api_secret)
@@ -144,6 +149,7 @@ if __name__ == '__main__':
     #                                       .get_top_from_day(limit=25)
     #                                       .get_top_from_hour(limit=25)
     #                                       .get_top_from_all(limit=25)
+        saveLastImage()
         findImage(submissions)
     except Exception:
         sys.exit(0)
