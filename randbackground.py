@@ -10,9 +10,20 @@ from imgurpython import ImgurClient
 from urlparse import urlparse
 from os.path import splitext, basename, expanduser
 
-def MakeDir():
+### Change these to fit your needs ######
+api_key_id = '#####################'
+api_secret = '########################'
+localFileName = 'newBackgroundImage'
+home = expanduser("~")
+subdirectory = home + "/Documents/scripts/backgroundImages"
+MIN_SCORE = 10
+subLimit = 500
+reddit_user_agent = '#########################'
+
+
+def MakeDir(subDir):
     try:
-        os.makedirs(subdirectory)
+        os.makedirs(subDir)
     except Exception:
         pass
 
@@ -45,7 +56,6 @@ def goToImgur(submission):
     if submission.score < MIN_SCORE:
         findImage(submissions)
     if 'http://imgur.com/a/' in submission.url:
-        newcounter = 0
         albumId = submission.url[len('http://imgur.com/a/'):]
         album = client.get_album_images(albumId)
         
@@ -93,37 +103,28 @@ def findImage(submissions):
             goToImgur(submission)
             break
 
-#used for imgur api
-api_key_id = 'XXXXXXXXXXXXXXXXX' #get from imgur
-api_secret = '#######################################' #get from imgur
-#start imgur session
-try:
-    client = ImgurClient(api_key_id, api_secret)
-except ImgurClientError as e:
-    sys.exit(0)
+if __name__ == '__main__':
+   #start imgur session
+    try:
+        client = ImgurClient(api_key_id, api_secret)
+    except ImgurClientError as e:
+        sys.exit(0)
 
-targetSubreddit = selectSubreddit()
-#dont want any pleb posts
-MIN_SCORE = 10
-imgurUrlPattern = re.compile(r'(http://i.imgur.com/(.*))(\?.*)?')
-home = expanduser("~")
-localFileName = 'newBackgroundImage'
-subdirectory = home + "/Documents/scripts/backgroundImages"
-filepath = subdirectory + "/" + localFileName
-# Connect to reddit and download the subreddit front page
-subLimit = 500
-MakeDir()
-try:
-    # Note: Be sure to change the user-agent to something unique.
-    r = praw.Reddit(user_agent='MAKE YOUR OWN') 
-    submissions = r.get_subreddit(targetSubreddit).get_top_from_year(limit=subLimit)
-# Or use one of these functions:
-#                                       .get_top_from_year(limit=25)
-#                                       .get_top_from_month(limit=25)
-#                                       .get_top_from_week(limit=25)
-#                                       .get_top_from_day(limit=25)
-#                                       .get_top_from_hour(limit=25)
-#                                       .get_top_from_all(limit=25)
-    findImage(submissions)
-except Exception:
-    sys.exit(0)
+    targetSubreddit = selectSubreddit()  
+    imgurUrlPattern = re.compile(r'(http://i.imgur.com/(.*))(\?.*)?')
+    filepath = subdirectory + "/" + localFileName
+    MakeDir(subdirectory)
+    try:
+        # Note: Be sure to change the user-agent to something unique.
+        r = praw.Reddit(user_agent=reddit_user_agent) 
+        submissions = r.get_subreddit(targetSubreddit).get_top_from_year(limit=subLimit)
+    # Or use one of these functions:
+    #                                       .get_top_from_year(limit=25)
+    #                                       .get_top_from_month(limit=25)
+    #                                       .get_top_from_week(limit=25)
+    #                                       .get_top_from_day(limit=25)
+    #                                       .get_top_from_hour(limit=25)
+    #                                       .get_top_from_all(limit=25)
+        findImage(submissions)
+    except Exception:
+        sys.exit(0)
