@@ -6,21 +6,22 @@ import requests
 import os
 import sys
 import random
+import argparse
+import logging
 from imgurpython import ImgurClient
 from urlparse import urlparse
 from os.path import splitext, basename, expanduser
 
 ### Change these to fit your needs ######
-api_key_id = '#####################'
-api_secret = '########################'
+api_key_id = '###############'
+api_secret = '#########################################'
 localFileName = 'newBackgroundImage'
 home = expanduser("~")
-subdirectory = home + "/Documents/scripts/backgroundImages"
+subdirectory = home + "/Documents/scripts/randomBackground/backgroundImages"
 MIN_SCORE = 10
 subLimit = 500
-reddit_user_agent = '#########################'
-
-
+reddit_user_agent = '#####################'
+debug_file = home + "/Documents/scripts/randomBackgrounds/log.txt"
 def MakeDir(subDir):
     try:
         os.makedirs(subDir)
@@ -51,11 +52,16 @@ def downloadImage(imageUrl):
         os.system(cmd)
 
 def goToImgur(submission):
+   
+    logging.info("the URL was %s" % submission.url)
     if "imgur.com/" not in submission.url:
         findImage(submissions)
+        logging.debug("In first if")
     if submission.score < MIN_SCORE:
+        logging.debug("In 2nd if")
         findImage(submissions)
-    if 'http://imgur.com/a/' in submission.url:
+    if 'imgur.com/a/' in submission.url:
+        logging.debug("In 3rd if")
         albumId = submission.url[len('http://imgur.com/a/'):]
         album = client.get_album_images(albumId)
         
@@ -64,7 +70,8 @@ def goToImgur(submission):
         imageUrl = album[getAlbumRand].link
         downloadImage(imageUrl)
                 
-    elif 'http://i.imgur.com/' in submission.url:
+    elif 'i.imgur.com/' in submission.url:
+        logging.debug("In first elif")
         # The URL is a direct link to the image.
         # using regex here instead of BeautifulSoup because we are pasing
         # a url not html
@@ -78,7 +85,8 @@ def goToImgur(submission):
 
         downloadImage(submission.url)
 
-    elif 'http://imgur.com/' in submission.url:
+    elif 'imgur.com/' in submission.url:
+        logging.debug("In 2nd elif")
         # This is an Imgur page with a single image.
         # change the url to redirect to i.imgur link
         url = submission.url
@@ -88,6 +96,8 @@ def goToImgur(submission):
             image = client.get_image(imageId)
             imageurl = image.link
             submission.url = imageurl
+            logging.debug("imageurl is %s" % imageurl)
+        #    downloadImage(imageUrl)
         except ImgurClientError as e:
             sys.exit(0)
         goToImgur(submission)
@@ -104,7 +114,17 @@ def findImage(submissions):
             break
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+    description='A test script for http://stackoverflow.com/q/14097061/78845'
+        )
+    parser.add_argument("-d", "--debug", help="increase output verbosity",
+        action="store_true")
+
+    args = parser.parse_args()
+    if args.debug:
+        logging.basicConfig(filename=debug_file, level=logging.DEBUG)
    #start imgur session
+    logging.info("Start of run")
     try:
         client = ImgurClient(api_key_id, api_secret)
     except ImgurClientError as e:
