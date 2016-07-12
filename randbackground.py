@@ -24,7 +24,10 @@ reddit_user_agent = '##################'
 debug_file = home + "/Documents/scripts/log.txt"
 
 def saveLastImage():
-    os.rename(os.path.join(subdirectory, localFileName), os.path.join(subdirectory,localFileName + "-old"))
+    try:
+        os.rename(os.path.join(subdirectory, localFileName), os.path.join(subdirectory,localFileName + "-old"))
+    except Exception:
+        pass
 
 def MakeDir(subDir):
     try:
