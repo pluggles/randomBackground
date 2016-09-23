@@ -1,14 +1,18 @@
 # randomBackground
 Finds an imgur link from multiple reddit wallpaper subreddits, downloads the image and sets as a wallpaper
 
-#Needed packages
-sudo pip install imgurpython 
+#Needed packages (installed through pip)
+imgurpython 
 
-sudo pip install praw
+praw
 
-sudo pip install urlparse
+urlparse
 
-sudo pip install pyopenssl ndg-httpsclient pyasn1
+pyopenssl 
+
+ndg-httpsclient
+
+pyasn1
 
 #Using the Script
 You will need to set up an Imgur api key:
