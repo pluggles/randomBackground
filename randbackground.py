@@ -25,7 +25,7 @@ debug_file = home + "/Documents/scripts/log.txt"
 
 def saveLastImage():
     try:
-        os.rename(os.path.join(subdirectory, localFileName), os.path.join(subdirectory,localFileName + "-old"))
+        os.rename(os.path.join(subdirectory, localFileName), os.path.join(subdirectory, time.strftime("%Y%m%d-%H%M%S")))
     except Exception:
         pass
 
@@ -53,11 +53,13 @@ def downloadImage(imageUrl):
             for chunk in response.iter_content(4096):
                 fo.write(chunk)
         #this line changes the background
-        cmd = "/usr/bin/gsettings set org.gnome.desktop.background" \
+        setBackground(filepath)
+def setBackground(filepath):
+    cmd = "/usr/bin/gsettings set org.gnome.desktop.background" \
         " picture-uri " \
         "file://" + filepath
-        os.system(cmd)
-
+    scale = "gsettings set org.gnome.desktop.background picture-options \"scaled\""    
+    os.system(cmd)
 def goToImgur(submission):
    
     logging.info("the URL was %s" % submission.url)
