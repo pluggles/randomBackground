@@ -17,7 +17,7 @@ Attributes:
 """
 import os
 from os.path import splitext, basename, expanduser
-from urlparse import urlparse
+from urllib.parse import urlparse
 import re
 import time
 import sys
@@ -31,8 +31,8 @@ import requests
 
 ### Change these to fit your needs ######
 #imgur
-API_KEY_ID = '###############'
-API_SECRET = '##############################'
+API_KEY_ID = 'Set_This_Up'
+API_SECRET = 'Set_This_Up'
 LOCALFILENAME = 'newBackgroundImage'
 HOME = expanduser("~")
 SUBDIRECTORY = HOME + "/Documents/scripts/backgroundImages"
@@ -64,9 +64,9 @@ def make_dir(sub_dir):
         if not os.path.exists(sub_dir):
             os.makedirs(sub_dir)
     except OSError as error:
-        print "Error making " + sub_dir
-        print error
-        print "continuing though..."
+        print("Error making " + sub_dir)
+        print(error)
+        print("continuing though...")
 def select_subreddit():
     """Summary
     Randomly selects a subreddit to try and pull an image from
@@ -79,7 +79,8 @@ def select_subreddit():
         "wallpapers",
         "MinimalWallpaper",
         "wallpaperdump",
-        "comicwalls"
+        "ComicWalls",
+        "WQHD_Wallpaper"
         ]
     subreddit = random.choice(subreddits)
     return subreddit
@@ -100,9 +101,9 @@ def download_image(image_url):
             #this line changes the background
             set_background(FILEPATH)
     except requests.exceptions.RequestException as error:
-        print "Error occured in download_image"
-        print error
-        print "exiting"
+        print("Error occured in download_image")
+        print(error)
+        print("exiting")
     except IOError as error:
         logging.debug("Error occured writing image...probably")
 def set_background(filepath):
@@ -184,7 +185,7 @@ def get_link_from_album(submission):
         image_url = album[get_album_rand].link
         download_image(image_url)
     except ImgurClientError as error:
-        print error
+        print(error)
         os.execv(sys.executable, ['python'] + sys.argv)
         sys.exit(0)
     except OSError as error:
@@ -271,10 +272,10 @@ def establish_reddit_connection():
     """
     #client_id = 'callmederpGetWallpaper'
     try:
-        reddit_app_key = '##############'
-        reddit_app_secret = '########################'
+        reddit_app_key = 'AUz0fpppWobXBQ'
+        reddit_app_secret = 'e8W3TDDGRDInvj9dcJityxFk778'
         # Note: Be sure to change the user-agent to something unique.
-        reddit_user_agent = 'SOME UNIQUE USER AGENT'
+        reddit_user_agent = 'callmederpGetWallpaper version 2.0'
         reddit_connection = praw.Reddit(user_agent=reddit_user_agent, client_id=reddit_app_key,
                                         client_secret=reddit_app_secret)
         return reddit_connection
@@ -311,7 +312,7 @@ if __name__ == '__main__':
         save_last_image()
         find_image(SUBMISSIONS)
     except praw.exceptions.PRAWException as ex:
-        print "error:", sys.exc_info()[0]
-        print ex
+        print("error:", sys.exc_info()[0])
+        print(ex)
         sys.exit(0)
         
